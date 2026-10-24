@@ -619,7 +619,9 @@ void OpenSLPlayback::stop()
         } while(SL_RESULT_SUCCESS == result && state.count > 0);
         PRINTERR(result, "bufferQueue->GetState");
 
-        mRing.reset();
+        // stop/start is also used by ALC_SOFT_pause_device. Keep the ring
+        // allocated: start() resets its cursors, while reset() or destruction
+        // owns releasing/replacing the allocation.
     }
 }
 
